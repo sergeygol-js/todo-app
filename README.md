@@ -2,6 +2,10 @@
 
 In the project directory, you can run:
 
+### `npm i`
+
+Установка необходимых для работы модулей
+
 ### `npm start`
 
 Runs the app in the development mode.\
