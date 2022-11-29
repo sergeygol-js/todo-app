@@ -1,0 +1,42 @@
+.inputForm {
+  position: fixed;
+  text-align: center;
+  z-index: 1;
+  margin-top: -24px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(42, 51, 48, 0.5);
+}
+
+.formHeader {
+  padding: 20px 0 10px 0;
+}
+
+.inputBackground {
+  margin: 100px auto;
+  width: 550px;
+  padding-bottom: 20px;
+  background-color: rgba(42, 51, 48, 1);
+  border-radius: 10px;
+}
+
+.formList {
+  display: grid;
+  grid-template-columns: 200px 300px;
+  grid-row-gap: 1em;
+  margin: 0 auto;
+  padding-bottom: 30px;
+  padding-top: 30px;
+}
+
+.formList > input {
+  height: 30px;
+  margin: 0;
+  padding: 0 10px;
+}
+
+.formList > label {
+  height: 30px;
+  margin-top: 5px;
+  margin-left: 30px;
+}
