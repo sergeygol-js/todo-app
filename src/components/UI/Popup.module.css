@@ -1,0 +1,9 @@
+.bg {
+  position: fixed;
+  background-color: rgb(111, 127, 219, 0.3);
+  width: 220px;
+  height: 40px;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+}

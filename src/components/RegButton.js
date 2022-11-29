@@ -4,22 +4,22 @@ export default function RegButton({ onClick }) {
   return (
     <>
       <hr style={{ margin: '30px 0 10px 0' }} />
-      <h3>For save your todo's</h3>
+      <h3>Для сохранения и отображения ваших задач</h3>
       <h3>
-        You can use:
+        Вы можете:
         <Button
           style={{
             margin: '15px 10px 10px 10px',
             fontSize: '15px',
             fontWeight: '5px',
-            width: '150px',
+            width: '170px',
             height: '30px',
-            padding: '0px',
+            padding: '0',
           }}
-          children='Registration form'
+          children='Зарегистрироваться'
           onClick={onClick}
         />
-        or
+        или
         <Button
           style={{
             margin: '15px 10px 10px 10px',
@@ -29,7 +29,7 @@ export default function RegButton({ onClick }) {
             height: '30px',
             padding: '0px',
           }}
-          children='Sign in'
+          children='Войти'
           onClick={onClick}
         />
       </h3>

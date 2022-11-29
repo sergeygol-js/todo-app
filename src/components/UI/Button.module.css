@@ -12,3 +12,19 @@
 .button:hover {
   background-color: rgb(240, 240, 155);
 }
+
+.popUpButton {
+  margin: 5px;
+  font-size: 10px;
+  cursor: pointer;
+  background-color: rgba(245, 245, 220, 0.9);
+  font-weight: 5px;
+  width: 100px;
+  height: 30px;
+  padding: 0;
+  border-radius: 5px;
+}
+
+.popUpButton:hover {
+  background-color: rgb(240, 240, 155);
+}
