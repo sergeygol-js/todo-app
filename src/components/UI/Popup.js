@@ -9,16 +9,11 @@ function Popup({ left, top, onConfirm, onCancel }) {
     >
       <Button
         onClick={onConfirm}
-        buttonStyle='popup'
+        view='popup'
         children='Подтвердить'
         type='submit'
       />
-      <Button
-        onClick={onCancel}
-        buttonStyle='popup'
-        children='Отмена'
-        type='cancel'
-      />
+      <Button onClick={onCancel} view='popup' children='Отмена' type='cancel' />
     </div>
   )
 }

@@ -1,12 +1,12 @@
 import styles from './Button.module.css'
 
 function Button(props) {
-  const { children, disabled = false, buttonStyle = 'button' } = props
+  const { children, disabled = false, view = 'button' } = props
 
   return (
     <button
       {...props}
-      className={buttonStyle === 'popup' ? styles.popUpButton : styles.button}
+      className={view === 'popup' ? styles.popUpButton : styles.button}
       disabled={disabled}
     >
       {children}
