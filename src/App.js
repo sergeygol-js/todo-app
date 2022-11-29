@@ -7,10 +7,11 @@ import TodoList from './components/Todos/TodoList'
 import TodosActions from './components/Todos/TodosActions'
 import RegButton from './components/RegButton'
 import Popup from './components/UI/Popup'
+import Button from './components/UI/Button'
 
 function App() {
   const [todos, setTodos] = useState([])
-  const [form, setForm] = useState(false)
+  const [modalForm, setModalForm] = useState(false)
   const [popup, setPopup] = useState(false)
   const [popUpCoords, setPopUpCoords] = useState({ left: 0, top: 0 })
   const [popUpState, setPopUpState] = useState(false)
@@ -19,28 +20,33 @@ function App() {
   const addTodoHandler = (text) => {
     if (text !== '') {
       const newTodo = {
-        text: text, //можно просто text
+        text, //можно просто text
         isCompleted: false,
         id: uuidv4(),
       }
       setTodos([...todos, newTodo])
+      setUserData({ ...userData, todos: [...todos, newTodo] })
     }
+    console.log(userData)
   }
 
   const changeUserData = (fName, sName, email, password) => {
     const data = {
+      id: uuidv4(),
       firstName: fName,
       secondName: sName,
       email,
       password,
+      todos: todos,
     }
     setUserData(data)
-    toggleRegistrForm()
+    data.firstName && toggleRegistrForm()
   }
   console.log(userData) //userData - данные пользователя
 
   const deleteTodoHandler = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id))
+    setUserData({ ...userData, todos: todos })
   }
 
   const toggleTodoHandler = (id) => {
@@ -51,6 +57,7 @@ function App() {
           : { ...todo }
       })
     )
+    setUserData({ ...userData, todos: todos })
   }
 
   const resetTodosHandler = () => {
@@ -81,18 +88,17 @@ function App() {
     setPopUpState(false)
   }
 
-  const openRegForm = (e) => {
+  const logout = (e) => {
     togglePopUp(e)
   }
 
   useEffect(() => {
-    console.log('sss')
-    popUpState && toggleRegistrForm()
+    popUpState && changeUserData('', '', '', '', '', '')
     setPopUpState(false)
   }, [popUpState])
 
   const toggleRegistrForm = () => {
-    setForm(!form)
+    setModalForm(!modalForm)
   }
 
   const completedTodosCount = todos.filter((todo) => todo.isCompleted).length
@@ -108,19 +114,32 @@ function App() {
           onCancel={popUpCancel}
         />
       )}
-      {form && (
+      {modalForm && (
         <InputForm onConfirm={changeUserData} onCancel={toggleRegistrForm} />
       )}
       <div className='App'>
         <h1>Todo App</h1>
 
         {userData.firstName ? (
-          <h2
-            style={{ marginBottom: '15px' }}
-          >{`Привет, ${userData.firstName}! Вы вошли.`}</h2>
+          <>
+            <h2>{`Привет, ${userData.firstName}! Вы вошли`} </h2>
+            <Button
+              style={{
+                margin: '10px 10px 15px 10px',
+                fontSize: '15px',
+                fontWeight: '5px',
+                width: '70px',
+                height: '30px',
+                padding: '0px',
+                backgroundColor: 'rgba(196, 51, 51, 0.7)',
+              }}
+              children='Выйти'
+              onClick={logout}
+            />
+          </>
         ) : (
           <>
-            <RegButton onClick={openRegForm} />
+            <RegButton onClick={toggleRegistrForm} />
           </>
         )}
 
