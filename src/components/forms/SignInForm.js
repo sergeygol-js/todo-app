@@ -1,15 +1,26 @@
-import styles from './InputForm.module.css'
+import styles from './SignInForm.module.css'
 import Button from '../UI/Button'
 
-export default function InputForm({ onConfirm, onCancel }) {
+export default function SignInForm({ onConfirm, onCancel, userBase }) {
   function handleFromSubmit(event) {
     event.preventDefault()
-    onConfirm({
-      firstName: event.target.firstName.value,
-      secondName: event.target.secondName.value,
-      email: event.target.email.value,
-      password: event.target.password.value,
-    })
+    console.log('working', userBase)
+    const mail = event.target.email.value
+    const pass = event.target.password.value
+    const filteredUser = userBase.filter(
+      (user) => user.email === mail && user.password === pass
+    )[0]
+    console.log(filteredUser)
+    filteredUser
+      ? onConfirm({
+          id: filteredUser.id,
+          firstName: filteredUser.firstName,
+          secondName: filteredUser.secondName,
+          email: filteredUser.email,
+          password: filteredUser.password,
+          todoList: filteredUser.todoList,
+        })
+      : alert('Неправильно введен email или пароль')
   }
 
   function handleFromCancel(event) {
@@ -21,19 +32,9 @@ export default function InputForm({ onConfirm, onCancel }) {
   return (
     <div className={styles.inputForm}>
       <form className={styles.inputBackground} onSubmit={handleFromSubmit}>
-        <h2 className={styles.formHeader}>Регистрация</h2>
+        <h2 className={styles.formHeader}>Для входа введите ваши данные</h2>
         <hr />
         <div className={styles.formList}>
-          <label htmlFor='firstName'>Имя:</label>
-          <input
-            id='firstName'
-            type='text'
-            defaultValue='Sergio' //change to placeholder after test ends)
-          />
-
-          <label htmlFor='secondName'>Фамилия:</label>
-          <input id='secondName' type='text' defaultValue='Passad' />
-
           <label htmlFor='email'>Email:</label>
           <input
             id='email'
