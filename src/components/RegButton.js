@@ -8,30 +8,12 @@ export default function RegButton({ onClick }) {
       <h3>
         Вы можете:
         <Button
-          style={{
-            margin: '15px 10px 10px 10px',
-            fontSize: '15px',
-            fontWeight: '5px',
-            width: '170px',
-            height: '30px',
-            padding: '0',
-          }}
+          btype='smallButton'
           children='Зарегистрироваться'
           onClick={onClick}
         />
         или
-        <Button
-          style={{
-            margin: '15px 10px 10px 10px',
-            fontSize: '15px',
-            fontWeight: '5px',
-            width: '70px',
-            height: '30px',
-            padding: '0px',
-          }}
-          children='Войти'
-          onClick={onClick}
-        />
+        <Button btype='smallButton' children='Войти' onClick={onClick} />
       </h3>
       <hr style={{ marginBottom: '30px' }} />
     </>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import './App.css'
 import InputForm from './components/forms/InputForm'
@@ -7,40 +7,46 @@ import TodoList from './components/Todos/TodoList'
 import TodosActions from './components/Todos/TodosActions'
 import RegButton from './components/RegButton'
 import Popup from './components/UI/Popup'
+import Button from './components/UI/Button'
 
 function App() {
   const [todos, setTodos] = useState([])
-  const [form, setForm] = useState(false)
+  const [modalForm, setModalForm] = useState(false)
   const [popup, setPopup] = useState(false)
   const [popUpCoords, setPopUpCoords] = useState({ left: 0, top: 0 })
-
+  const [popUpState, setPopUpState] = useState(false)
   const [userData, setUserData] = useState({})
 
   const addTodoHandler = (text) => {
     if (text !== '') {
       const newTodo = {
-        text: text, //можно просто text
+        text, //можно просто text
         isCompleted: false,
         id: uuidv4(),
       }
       setTodos([...todos, newTodo])
+      setUserData({ ...userData, todos: [...todos, newTodo] })
     }
+    console.log(userData)
   }
 
   const changeUserData = (fName, sName, email, password) => {
     const data = {
+      id: uuidv4(),
       firstName: fName,
       secondName: sName,
       email,
       password,
+      todos: todos,
     }
     setUserData(data)
-    toggleRegistrForm()
+    data.firstName && toggleRegistrForm()
   }
   console.log(userData) //userData - данные пользователя
 
   const deleteTodoHandler = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id))
+    setUserData({ ...userData, todos: todos })
   }
 
   const toggleTodoHandler = (id) => {
@@ -51,33 +57,49 @@ function App() {
           : { ...todo }
       })
     )
+    setUserData({ ...userData, todos: todos })
   }
 
   const resetTodosHandler = () => {
     setTodos([])
+    setUserData({ ...userData, todos: todos })
   }
 
   const deleteCompletedTodosHandler = () => {
     setTodos(todos.filter((todo) => !todo.isCompleted))
   }
 
-  const togglePopUp = () => {
-    setPopup(!popup)
-  }
-
-  const openRegForm = (e) => {
+  const togglePopUp = (e) => {
     const element = e.target.getBoundingClientRect()
     const x = element.left
     const y = element.top - 80
 
     setPopUpCoords({ left: x, top: y })
     console.log(popUpCoords.left, popUpCoords.top)
-    togglePopUp()
+    setPopup(!popup)
   }
 
-  const toggleRegistrForm = () => {
-    setForm(!form)
+  const popUpConfirm = () => {
+    setPopUpState(true)
     setPopup(false)
+  }
+
+  const popUpCancel = () => {
+    setPopup(false)
+    setPopUpState(false)
+  }
+
+  const logout = (e) => {
+    togglePopUp(e)
+  }
+
+  useEffect(() => {
+    popUpState && changeUserData('', '', '', '', '', '')
+    setPopUpState(false)
+  }, [popUpState])
+
+  const toggleRegistrForm = () => {
+    setModalForm(!modalForm)
   }
 
   const completedTodosCount = todos.filter((todo) => todo.isCompleted).length
@@ -85,27 +107,28 @@ function App() {
 
   return (
     <>
-      {popup ? (
+      {popup && (
         <Popup
           left={popUpCoords.left}
           top={popUpCoords.top}
-          onConfirm={toggleRegistrForm}
-          onCancel={togglePopUp}
+          onConfirm={popUpConfirm}
+          onCancel={popUpCancel}
         />
-      ) : null}
-      {form && (
+      )}
+      {modalForm && (
         <InputForm onConfirm={changeUserData} onCancel={toggleRegistrForm} />
       )}
       <div className='App'>
         <h1>Todo App</h1>
 
         {userData.firstName ? (
-          <h2
-            style={{ marginBottom: '15px' }}
-          >{`Привет, ${userData.firstName}! Вы вошли.`}</h2>
+          <>
+            <h2>{`Привет, ${userData.firstName}! Вы вошли`} </h2>
+            <Button btype='exitButton' children='Выйти' onClick={logout} />
+          </>
         ) : (
           <>
-            <RegButton onClick={openRegForm} />
+            <RegButton onClick={toggleRegistrForm} />
           </>
         )}
 

@@ -9,8 +9,23 @@
   border-radius: 5px;
 }
 
-.button:hover {
+.button:hover,
+.exitButton:hover,
+.popUpButton:hover,
+.smallButton:hover {
   background-color: rgb(240, 240, 155);
+}
+
+.smallButton {
+  margin: 15px 10px 10px 10px;
+  font-size: 15px;
+  cursor: pointer;
+  background-color: beige;
+  font-weight: 5px;
+  width: 170px;
+  height: 30px;
+  padding: 0;
+  border-radius: 5px;
 }
 
 .popUpButton {
@@ -25,6 +40,12 @@
   border-radius: 5px;
 }
 
-.popUpButton:hover {
-  background-color: rgb(240, 240, 155);
+.exitButton {
+  margin: 10px 10px 15px 10px;
+  font-size: 15px;
+  font-weight: 5px;
+  width: 70px;
+  height: 30px;
+  padding: 0px;
+  background-color: rgba(196, 51, 51, 0.7);
 }
