@@ -62,6 +62,7 @@ function App() {
 
   const resetTodosHandler = () => {
     setTodos([])
+    setUserData({ ...userData, todos: todos })
   }
 
   const deleteCompletedTodosHandler = () => {
@@ -123,19 +124,7 @@ function App() {
         {userData.firstName ? (
           <>
             <h2>{`Привет, ${userData.firstName}! Вы вошли`} </h2>
-            <Button
-              style={{
-                margin: '10px 10px 15px 10px',
-                fontSize: '15px',
-                fontWeight: '5px',
-                width: '70px',
-                height: '30px',
-                padding: '0px',
-                backgroundColor: 'rgba(196, 51, 51, 0.7)',
-              }}
-              children='Выйти'
-              onClick={logout}
-            />
+            <Button btype='exitButton' children='Выйти' onClick={logout} />
           </>
         ) : (
           <>

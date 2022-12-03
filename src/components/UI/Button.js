@@ -1,14 +1,10 @@
 import styles from './Button.module.css'
 
 function Button(props) {
-  const { children, disabled = false, view = 'button' } = props
+  const { children, disabled = false, btype = 'button' } = props
 
   return (
-    <button
-      {...props}
-      className={view === 'popup' ? styles.popUpButton : styles.button}
-      disabled={disabled}
-    >
+    <button {...props} className={styles[btype]} disabled={disabled}>
       {children}
     </button>
   )
