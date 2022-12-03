@@ -1,6 +1,6 @@
 import Button from './UI/Button'
 
-export default function RegButton({ onClick }) {
+export default function RegButton({ onClickReg, onClickAuth }) {
   return (
     <>
       <hr style={{ margin: '30px 0 10px 0' }} />
@@ -10,10 +10,10 @@ export default function RegButton({ onClick }) {
         <Button
           btype='smallButton'
           children='Зарегистрироваться'
-          onClick={onClick}
+          onClick={onClickReg}
         />
         или
-        <Button btype='smallButton' children='Войти' onClick={onClick} />
+        <Button btype='smallButton' children='Войти' onClick={onClickAuth} />
       </h3>
       <hr style={{ marginBottom: '30px' }} />
     </>

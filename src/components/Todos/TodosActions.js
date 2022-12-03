@@ -9,11 +9,11 @@ function TodosActions({
 }) {
   return (
     <div className={styles.todosActionsContainer}>
-      <Button title='Reset Todos' onClick={resetTodos}>
+      <Button title='Удалить все задачи' onClick={resetTodos}>
         <RiRefreshLine />
       </Button>
       <Button
-        title='Clear Completed Todos'
+        title='Удалить выполненные задачи'
         onClick={deleteCompletedTodos}
         disabled={!completedTodosExist}
       >

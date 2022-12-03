@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import './App.css'
 import InputForm from './components/forms/InputForm'
+import SignInForm from './components/forms/SignInForm'
 import TodoForm from './components/Todos/TodoForm'
 import TodoList from './components/Todos/TodoList'
 import TodosActions from './components/Todos/TodosActions'
 import RegButton from './components/RegButton'
 import Popup from './components/UI/Popup'
 import Button from './components/UI/Button'
+import axios from 'axios'
 
 function App() {
   const [todos, setTodos] = useState([])
@@ -15,38 +17,83 @@ function App() {
   const [popup, setPopup] = useState(false)
   const [popUpCoords, setPopUpCoords] = useState({ left: 0, top: 0 })
   const [popUpState, setPopUpState] = useState(false)
-  const [userData, setUserData] = useState({})
+  const [activeUserData, setActiveUserData] = useState({})
+  const [allTodos, setAllTodos] = useState([])
+  const [authForm, setAuthForm] = useState(false)
+
+  const baseURL = 'https://jsonplaceholder.typicode.com/users'
+
+  const [userBase, setUserBase] = useState(null)
+
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/todos').then((response) => {
+      const todosBase = response.data.map((data) => ({
+        text: data.title,
+        isCompleted: data.completed,
+        id: data.id,
+        userId: data.userId,
+      }))
+      setAllTodos(todosBase)
+    })
+  }, [])
+
+  useEffect(() => {
+    axios.get(baseURL).then((response) => {
+      const tempBase = response.data.map((data) => ({
+        id: data.id,
+        firstName: data.name.split(' ')[0],
+        secondName: data.name.split(' ')[1],
+        email: data.email,
+        password: data.username,
+        todoList: allTodos.filter((todo) => todo.userId === data.id),
+      }))
+      setUserBase(tempBase)
+    })
+  }, [allTodos])
+
+  console.log(userBase)
 
   const addTodoHandler = (text) => {
     if (text !== '') {
       const newTodo = {
-        text, //можно просто text
+        text,
         isCompleted: false,
         id: uuidv4(),
+        userId: activeUserData.id ? activeUserData.id : -1,
       }
       setTodos([...todos, newTodo])
-      setUserData({ ...userData, todos: [...todos, newTodo] })
+      setActiveUserData({ ...activeUserData, todos: [...todos, newTodo] })
     }
-    console.log(userData)
+    console.log(activeUserData)
   }
 
-  const changeUserData = (fName, sName, email, password) => {
+  const changeActiveUserData = ({
+    id = uuidv4(),
+    firstName,
+    secondName,
+    email,
+    password,
+    todoList = todos,
+  }) => {
     const data = {
-      id: uuidv4(),
-      firstName: fName,
-      secondName: sName,
+      id,
+      firstName,
+      secondName,
       email,
       password,
-      todos: todos,
+      todoList,
     }
-    setUserData(data)
-    data.firstName && toggleRegistrForm()
+    setActiveUserData(data)
+    data.firstName && setModalForm(false)
+    console.log(activeUserData)
+    setAuthForm(false)
+    setTodos(todoList)
   }
-  console.log(userData) //userData - данные пользователя
+  console.log(activeUserData)
 
   const deleteTodoHandler = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id))
-    setUserData({ ...userData, todos: todos })
+    setActiveUserData({ ...activeUserData, todos: todos })
   }
 
   const toggleTodoHandler = (id) => {
@@ -57,12 +104,12 @@ function App() {
           : { ...todo }
       })
     )
-    setUserData({ ...userData, todos: todos })
+    setActiveUserData({ ...activeUserData, todos: todos })
   }
 
   const resetTodosHandler = () => {
     setTodos([])
-    setUserData({ ...userData, todos: todos })
+    setActiveUserData({ ...activeUserData, todos: todos })
   }
 
   const deleteCompletedTodosHandler = () => {
@@ -94,12 +141,17 @@ function App() {
   }
 
   useEffect(() => {
-    popUpState && changeUserData('', '', '', '', '', '')
+    popUpState && changeActiveUserData('', '', '', '', '', '')
     setPopUpState(false)
+    setTodos([])
   }, [popUpState])
 
   const toggleRegistrForm = () => {
     setModalForm(!modalForm)
+  }
+
+  const toggleAuthForm = () => {
+    setAuthForm(!authForm)
   }
 
   const completedTodosCount = todos.filter((todo) => todo.isCompleted).length
@@ -115,20 +167,36 @@ function App() {
           onCancel={popUpCancel}
         />
       )}
+
       {modalForm && (
-        <InputForm onConfirm={changeUserData} onCancel={toggleRegistrForm} />
+        <InputForm
+          onConfirm={changeActiveUserData}
+          onCancel={toggleRegistrForm}
+        />
       )}
+
+      {authForm && (
+        <SignInForm
+          userBase={userBase}
+          onConfirm={changeActiveUserData}
+          onCancel={toggleAuthForm}
+        />
+      )}
+
       <div className='App'>
         <h1>Todo App</h1>
 
-        {userData.firstName ? (
+        {activeUserData.firstName ? (
           <>
-            <h2>{`Привет, ${userData.firstName}! Вы вошли`} </h2>
+            <h2>{`Привет, ${activeUserData.firstName}! Вы вошли`} </h2>
             <Button btype='exitButton' children='Выйти' onClick={logout} />
           </>
         ) : (
           <>
-            <RegButton onClick={toggleRegistrForm} />
+            <RegButton
+              onClickReg={toggleRegistrForm}
+              onClickAuth={toggleAuthForm}
+            />
           </>
         )}
 
@@ -148,13 +216,7 @@ function App() {
         />
 
         {!!completedTodosCount && (
-          <h2>{`У вас есть ${completedTodosCount} ${
-            completedTodosCount > 1
-              ? completedTodosCount < 5
-                ? 'выполненные задач'
-                : 'выполненных задач'
-              : 'выполненная задача'
-          }`}</h2>
+          <h2>{`Выполненных задач: ${completedTodosCount}`}</h2>
         )}
       </div>
     </>

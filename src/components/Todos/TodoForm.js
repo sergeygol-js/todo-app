@@ -16,12 +16,12 @@ function TodoForm({ addTodo }) {
       <form onSubmit={onSubmitHandler}>
         <input
           type='text'
-          placeholder='Enter new todo'
+          placeholder='Введите новую задачу'
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
         <Button type='submit' title='Submit'>
-          Submit
+          Добавить
         </Button>
       </form>
     </div>
