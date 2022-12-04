@@ -26,23 +26,30 @@ export default function InputForm({ onConfirm, onCancel }) {
         <div className={styles.formList}>
           <label htmlFor='firstName'>Имя:</label>
           <input
+            required
             id='firstName'
             type='text'
             defaultValue='Sergio' //change to placeholder after test ends)
           />
 
           <label htmlFor='secondName'>Фамилия:</label>
-          <input id='secondName' type='text' defaultValue='Passad' />
+          <input required id='secondName' type='text' defaultValue='Passad' />
 
           <label htmlFor='email'>Email:</label>
           <input
+            required
             id='email'
             type='email'
             defaultValue='sergio_passad@gmail.com'
           />
 
           <label htmlFor='password'>Пароль:</label>
-          <input id='password' type='password' defaultValue='Example123' />
+          <input
+            required
+            id='password'
+            type='password'
+            defaultValue='Example123'
+          />
         </div>
         <Button children='Подтвердить' type='submit' />
         <Button children='Отмена' type='cancel' onClick={handleFromCancel} />
