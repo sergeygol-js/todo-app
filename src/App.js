@@ -16,9 +16,8 @@ function App() {
   const [modalForm, setModalForm] = useState(false)
   const [popup, setPopup] = useState(false)
   const [popUpCoords, setPopUpCoords] = useState({ left: 0, top: 0 })
-  const [popUpState, setPopUpState] = useState(false)
   const [activeUserData, setActiveUserData] = useState({})
-  const [allTodos, setAllTodos] = useState([])
+  const [apiTodos, setApiTodos] = useState([])
   const [authForm, setAuthForm] = useState(false)
   const [userBase, setUserBase] = useState(null)
   const popupFunc = useRef(null)
@@ -33,7 +32,7 @@ function App() {
         id: data.id,
         userId: data.userId,
       }))
-      setAllTodos(todosBase)
+      setApiTodos(todosBase)
     })
   }, [])
 
@@ -45,14 +44,13 @@ function App() {
         secondName: data.name.split(' ')[1],
         email: data.email,
         password: data.username,
-        todoList: allTodos.filter((todo) => todo.userId === data.id),
+        todoList: apiTodos.filter((todo) => todo.userId === data.id),
       }))
       setUserBase(tempBase)
     })
-  }, [allTodos])
+  }, [apiTodos])
 
   console.log(userBase)
-
 
   const addTodoHandler = (text) => {
     if (text !== '') {
@@ -84,13 +82,21 @@ function App() {
       password,
       todoList,
     }
-    setActiveUserData(data)
-    data.firstName && setModalForm(false)
-    console.log(activeUserData)
+    authForm && setActiveUserData(data)
     setAuthForm(false)
     setTodos(todoList)
+    if (
+      data.firstName &&
+      !userBase.filter((user) => user.email === data.email).length
+    ) {
+      setActiveUserData(data)
+      setUserBase([...userBase, data])
+      setModalForm(false)
+    } else
+      modalForm &&
+        alert('Данный email уже использовался, либо вы не заполнили все поля')
   }
-  console.log(activeUserData)
+  console.log(activeUserData, 'new base', userBase)
 
   const deleteTodoHandler = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id))
@@ -129,20 +135,23 @@ function App() {
 
   const popUpConfirm = () => {
     if (popupFunc.current) {
-      popupFunc.current()
       setPopup(false)
+      popupFunc.current()
     }
   }
 
   const popUpCancel = () => {
     setPopup(false)
-    setPopUpState(false)
   }
 
   const logout = (e) => {
     togglePopUp(e)
+    const tempBase = userBase.filter((data) => data.id !== activeUserData.id)
+    setActiveUserData({ ...activeUserData, todoList: todos })
+    setUserBase([...tempBase, { ...activeUserData, todoList: todos }])
     popupFunc.current = () => {
-      changeActiveUserData('', '', '', '', '', '')
+      setActiveUserData([])
+      setTodos([])
     }
   }
 
