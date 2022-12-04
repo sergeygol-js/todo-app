@@ -37,13 +37,19 @@ export default function SignInForm({ onConfirm, onCancel, userBase }) {
         <div className={styles.formList}>
           <label htmlFor='email'>Email:</label>
           <input
+            required
             id='email'
             type='email'
             defaultValue='sergio_passad@gmail.com'
           />
 
           <label htmlFor='password'>Пароль:</label>
-          <input id='password' type='password' defaultValue='Example123' />
+          <input
+            required
+            id='password'
+            type='password'
+            defaultValue='Example123'
+          />
         </div>
         <Button children='Подтвердить' type='submit' />
         <Button children='Отмена' type='cancel' onClick={handleFromCancel} />

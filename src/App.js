@@ -85,16 +85,11 @@ function App() {
     authForm && setActiveUserData(data)
     setAuthForm(false)
     setTodos(todoList)
-    if (
-      data.firstName &&
-      !userBase.filter((user) => user.email === data.email).length
-    ) {
+    if (!userBase.filter((user) => user.email === data.email).length) {
       setActiveUserData(data)
       setUserBase([...userBase, data])
       setModalForm(false)
-    } else
-      modalForm &&
-        alert('Данный email уже использовался, либо вы не заполнили все поля')
+    } else modalForm && alert('Данный email уже использовался')
   }
   console.log(activeUserData, 'new base', userBase)
 
