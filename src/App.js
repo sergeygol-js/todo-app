@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import './App.css'
 import InputForm from './components/forms/InputForm'
@@ -20,13 +20,13 @@ function App() {
   const [activeUserData, setActiveUserData] = useState({})
   const [allTodos, setAllTodos] = useState([])
   const [authForm, setAuthForm] = useState(false)
-
-  const baseURL = 'https://jsonplaceholder.typicode.com/users'
-
   const [userBase, setUserBase] = useState(null)
+  const popupFunc = useRef(null)
+  const usersURL = 'https://jsonplaceholder.typicode.com/users'
+  const todosURL = 'https://jsonplaceholder.typicode.com/todos'
 
   useEffect(() => {
-    axios.get('https://jsonplaceholder.typicode.com/todos').then((response) => {
+    axios.get(todosURL).then((response) => {
       const todosBase = response.data.map((data) => ({
         text: data.title,
         isCompleted: data.completed,
@@ -38,7 +38,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    axios.get(baseURL).then((response) => {
+    axios.get(usersURL).then((response) => {
       const tempBase = response.data.map((data) => ({
         id: data.id,
         firstName: data.name.split(' ')[0],
@@ -128,8 +128,10 @@ function App() {
   }
 
   const popUpConfirm = () => {
-    setPopUpState(true)
-    setPopup(false)
+    if (popupFunc.current) {
+      popupFunc.current()
+      setPopup(false)
+    }
   }
 
   const popUpCancel = () => {
@@ -139,13 +141,24 @@ function App() {
 
   const logout = (e) => {
     togglePopUp(e)
+    popupFunc.current = () => {
+      changeActiveUserData('', '', '', '', '', '')
+    }
   }
 
-  useEffect(() => {
-    popUpState && changeActiveUserData('', '', '', '', '', '')
-    setPopUpState(false)
-    setTodos([])
-  }, [popUpState])
+  const resetTodosPop = (e) => {
+    togglePopUp(e)
+    popupFunc.current = () => {
+      resetTodosHandler()
+    }
+  }
+
+  const deleteCompletedTodosPop = (e) => {
+    togglePopUp(e)
+    popupFunc.current = () => {
+      deleteCompletedTodosHandler()
+    }
+  }
 
   const toggleRegistrForm = () => {
     setModalForm(!modalForm)
@@ -205,8 +218,8 @@ function App() {
         {!!todos.length && (
           <TodosActions
             completedTodosExist={!!completedTodosCount}
-            resetTodos={resetTodosHandler}
-            deleteCompletedTodos={deleteCompletedTodosHandler}
+            resetTodos={resetTodosPop}
+            deleteCompletedTodos={deleteCompletedTodosPop}
           />
         )}
 
