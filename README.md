@@ -9,9 +9,9 @@
 - Метки для выполенных задач
 - PopUp меню для подтверждения действий
 
-Для получения API используется jsonplaceholder.typicode.com.
+API получается с jsonplaceholder.typicode.com.
 
-![image](https://user-images.githubusercontent.com/107535358/205603965-e559669c-41bd-4efb-83e1-bec254d7a809.png)
+![image](https://user-images.githubusercontent.com/107535358/205606053-4dd4b326-8b45-447b-afe5-2e1e15775f9d.png)
 
 ## Доступные скрипты
 
