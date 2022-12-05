@@ -11,6 +11,8 @@
 
 Для получения API используется jsonplaceholder.typicode.com.
 
+![image](https://user-images.githubusercontent.com/107535358/205603965-e559669c-41bd-4efb-83e1-bec254d7a809.png)
+
 ## Доступные скрипты
 
 ### `npm i`
