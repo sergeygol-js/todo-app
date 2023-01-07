@@ -1,4 +1,4 @@
-import styles from './InputForm.module.css'
+import styles from './Form.module.css'
 import Button from '../UI/Button'
 
 export default function InputForm({ onConfirm, onCancel }) {

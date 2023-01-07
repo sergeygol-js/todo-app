@@ -1,10 +1,9 @@
-import styles from './SignInForm.module.css'
+import styles from './Form.module.css'
 import Button from '../UI/Button'
 
 export default function SignInForm({ onConfirm, onCancel, userBase }) {
   function handleFromSubmit(event) {
     event.preventDefault()
-    console.log('working', userBase)
     const mail = event.target.email.value
     const pass = event.target.password.value
     const filteredUser = userBase.filter(

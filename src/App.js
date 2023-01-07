@@ -17,38 +17,39 @@ function App() {
   const [popup, setPopup] = useState(false)
   const [popUpCoords, setPopUpCoords] = useState({ left: 0, top: 0 })
   const [activeUserData, setActiveUserData] = useState({})
-  const [apiTodos, setApiTodos] = useState([])
   const [authForm, setAuthForm] = useState(false)
   const [userBase, setUserBase] = useState(null)
   const popupFunc = useRef(null)
   const usersURL = 'https://jsonplaceholder.typicode.com/users'
   const todosURL = 'https://jsonplaceholder.typicode.com/todos'
 
-  useEffect(() => {
-    axios.get(todosURL).then((response) => {
-      const todosBase = response.data.map((data) => ({
+  const fetchTodo = async () => {
+    try {
+      const responseTodo = await axios.get(todosURL)
+      const todosBase = await responseTodo.data.map((data) => ({
         text: data.title,
         isCompleted: data.completed,
         id: data.id,
         userId: data.userId,
       }))
-      setApiTodos(todosBase)
-    })
-  }, [])
-
-  useEffect(() => {
-    axios.get(usersURL).then((response) => {
-      const tempBase = response.data.map((data) => ({
+      const responseUsers = await axios.get(usersURL)
+      const tempUsers = await responseUsers.data.map((data) => ({
         id: data.id,
         firstName: data.name.split(' ')[0],
         secondName: data.name.split(' ')[1],
         email: data.email,
         password: data.username,
-        todoList: apiTodos.filter((todo) => todo.userId === data.id),
+        todoList: todosBase.filter((todo) => todo.userId === data.id),
       }))
-      setUserBase(tempBase)
-    })
-  }, [apiTodos])
+      setUserBase(tempUsers)
+    } catch (error) {
+      alert(`Error fetch todos: ${error}`)
+    }
+  }
+
+  useEffect(() => {
+    fetchTodo()
+  }, [])
 
   console.log(userBase)
 
@@ -82,14 +83,17 @@ function App() {
       password,
       todoList,
     }
-    authForm && setActiveUserData(data)
-    setAuthForm(false)
-    setTodos(todoList)
+    if (authForm) {
+      setActiveUserData(data)
+      setAuthForm(false)
+    }
+    console.log('work')
     if (!userBase.filter((user) => user.email === data.email).length) {
       setActiveUserData(data)
       setUserBase([...userBase, data])
       setModalForm(false)
     } else modalForm && alert('Данный email уже использовался')
+    setTodos(todoList)
   }
   console.log(activeUserData, 'new base', userBase)
 
@@ -234,7 +238,9 @@ function App() {
         />
 
         {!!completedTodosCount && (
-          <h2>{`Выполненных задач: ${completedTodosCount}`}</h2>
+          <h2
+            style={{ marginBottom: '20px' }}
+          >{`Выполненных задач: ${completedTodosCount}`}</h2>
         )}
       </div>
     </>

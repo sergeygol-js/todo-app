@@ -13,7 +13,12 @@ export default function RegButton({ onClickReg, onClickAuth }) {
           onClick={onClickReg}
         />
         или
-        <Button btype='smallButton' children='Войти' onClick={onClickAuth} />
+        <Button
+          style={{ width: '80px' }}
+          btype='smallButton'
+          children='Войти'
+          onClick={onClickAuth}
+        />
       </h3>
       <hr style={{ marginBottom: '30px' }} />
     </>

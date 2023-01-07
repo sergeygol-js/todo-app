@@ -12,7 +12,8 @@
 }
 
 .todoText {
-  width: 100%;
+  overflow-wrap: break-word;
+  width: 75%;
   text-align: left;
 }
 
