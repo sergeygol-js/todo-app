@@ -15,6 +15,7 @@ export default function InputForm({ onConfirm, onCancel }) {
   function handleFromCancel(event) {
     event.preventDefault()
     console.log('canceled')
+    console.log('be happy')
     onCancel()
   }
 
